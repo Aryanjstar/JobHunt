@@ -22,7 +22,7 @@ Home, Tailor, Projects, Shortlist, Profile, Log.
 1. Profile and one-page tailor. Done.
 2. Cover letter in the same five-paragraph shape. Done.
 3. Pin two projects. Done.
-4. Public-board shortlist that stops before submit. Done.
+4. Public-board shortlist, India first, that stops before submit. Done.
 5. Form pre-fill on Greenhouse, Lever, Ashby, and Workday. Not built. The shortlist opens the posting instead.
 
 ## Rules that do not move

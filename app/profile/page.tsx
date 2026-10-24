@@ -4,7 +4,7 @@ import { accomplishments, bank, contact, education, preferences, projects, roles
 
 export default function ProfilePage() {
   return (
-    <Box sx={{ maxWidth: 760 }}>
+    <Box>
       <Typography variant="h1" sx={{ fontSize: 42, mb: 1 }}>
         Profile
       </Typography>
@@ -38,8 +38,9 @@ export default function ProfilePage() {
       ))}
 
       <Typography variant="h2" sx={{ fontSize: 26, mt: 3 }}>Projects that can go on the resume</Typography>
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 2 }}>
       {projects.filter((project) => project.onResume).map((project) => (
-        <Box key={project.id} sx={{ mb: 2 }}>
+        <Box key={project.id}>
           <Typography sx={{ fontWeight: 700 }}>{project.name}</Typography>
           <Typography color="text.secondary">{project.stack}</Typography>
           {project.note && <Typography color="text.secondary">{project.note}</Typography>}
@@ -48,6 +49,7 @@ export default function ProfilePage() {
           ))}
         </Box>
       ))}
+      </Box>
 
       <Typography variant="h2" sx={{ fontSize: 26 }}>Kept off the one-page resume</Typography>
       <Typography sx={{ mb: 1 }} color="text.secondary">

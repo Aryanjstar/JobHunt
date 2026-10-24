@@ -16,23 +16,23 @@ const cards = [
   {
     href: "/jobs",
     title: "Shortlist",
-    body: "Public company boards only. A role has to score 4 of 5. Desk prepares the documents and stops before submit.",
+    body: "Indian company boards first, then remote roles open to India. Desk prepares the documents. You submit them.",
   },
 ];
 
 export default function HomePage() {
   return (
-    <Box sx={{ maxWidth: 820 }}>
+    <Box>
       <Typography sx={{ letterSpacing: "0.16em", fontSize: 12, color: "text.secondary", mb: 1 }}>
         PRIVATE · FOR ARYAN JAISWAL
       </Typography>
       <Typography variant="h1" sx={{ fontSize: { xs: 48, md: 68 }, lineHeight: 0.95, mb: 2 }}>
         Desk
       </Typography>
-      <Typography sx={{ fontSize: 18, maxWidth: 560, mb: 4 }}>
+      <Typography sx={{ fontSize: 18, maxWidth: 720, mb: 4 }}>
         Early-career screens still read the first page. Recruiters then search the text for tools you actually used. Desk mirrors those words, keeps every number inside your profile, and never sends the application.
       </Typography>
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr 1fr" }, gap: 1.5 }}>
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr 1fr" }, gap: 1.5, alignItems: "stretch" }}>
         {cards.map((card) => (
           <Box
             key={card.href}

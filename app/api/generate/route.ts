@@ -1,6 +1,8 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
+import { interviewCues } from "@/lib/cues";
+import { factTrace } from "@/lib/guard";
 import { renderDocuments } from "@/lib/render";
 import { addApplication } from "@/lib/store";
 
@@ -56,18 +58,26 @@ export async function POST(request: Request) {
     coverTex: packet.coverTex,
   });
 
+  const traced = factTrace(
+    [packet.resumePlain, packet.coverPlain].filter((part): part is string => Boolean(part)).join("\n"),
+    packet.sources,
+  );
+
   return NextResponse.json({
     id,
     fit: packet.analysis,
     secondProject: packet.selection.projects[1]?.name ?? "",
     secondProjectReason: packet.selection.secondProjectReason,
     warnings: packet.warnings,
+    facts: traced.used,
+    cues: interviewCues(packet.analysis, packet.selection),
     resume: packet.resumeTex
       ? {
           plain: packet.resumePlain,
           tex: packet.resumeTex,
           pdfBase64: rendered.resumePdf ? rendered.resumePdf.toString("base64") : null,
           pages: rendered.resumePages,
+          fill: rendered.resumeFill,
           projects: packet.selection.projects.map((project) => ({
             name: project.name,
             stack: project.stack,
@@ -100,6 +110,7 @@ export async function POST(request: Request) {
           tex: packet.coverTex,
           pdfBase64: rendered.coverPdf ? rendered.coverPdf.toString("base64") : null,
           pages: rendered.coverPages,
+          fill: rendered.coverFill,
         }
       : null,
   });

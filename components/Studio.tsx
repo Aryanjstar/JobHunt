@@ -12,6 +12,7 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import { analyzeJd } from "@/lib/jd";
+import { parseQueue, QUEUE_KEY, type QueueItem } from "@/lib/queue";
 import { samples } from "@/lib/samples";
 import { DEFAULT_BUDGET, select } from "@/lib/select";
 import { LetterSheet, ResumeSheet, selectionPreview, type ResumePreview } from "./Preview";
@@ -21,7 +22,9 @@ type Docs = "resume" | "cover";
 type Generated = {
   id: string;
   warnings: string[];
-  resume: (ResumePreview & { tex: string; pdfBase64: string | null; pages: number }) | null;
+  facts: string[];
+  cues: string[];
+  resume: (ResumePreview & { tex: string; pdfBase64: string | null; pages: number; fill: number | null }) | null;
   cover: {
     paragraphs: string[];
     salutation: string;
@@ -30,12 +33,28 @@ type Generated = {
     tex: string;
     pdfBase64: string | null;
     pages: number;
+    fill: number | null;
   } | null;
 };
 
 function saveBase64(filename: string, b64: string) {
   const bytes = Uint8Array.from(atob(b64), (char) => char.charCodeAt(0));
   const url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  link.click();
+  URL.revokeObjectURL(url);
+}
+
+async function downloadUrl(path: string, filename: string) {
+  const response = await fetch(path);
+  const type = response.headers.get("content-type") ?? "";
+  if (!response.ok || !type.includes("pdf")) {
+    const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+    throw new Error(payload?.error || "The PDF did not download.");
+  }
+  const url = URL.createObjectURL(await response.blob());
   const link = document.createElement("a");
   link.href = url;
   link.download = filename;
@@ -71,8 +90,10 @@ export function Studio() {
   const [error, setError] = useState("");
   const [tab, setTab] = useState<"resume" | "cover">("resume");
   const [result, setResult] = useState<Generated | null>(null);
+  const [queue, setQueue] = useState<QueueItem[]>([]);
 
   useEffect(() => {
+    setQueue(parseQueue(localStorage.getItem(QUEUE_KEY)));
     const saved = localStorage.getItem("desk-projects");
     if (saved) {
       try {
@@ -154,8 +175,15 @@ export function Studio() {
       setResult({
         id: payload.id,
         warnings: payload.warnings ?? [],
+        facts: payload.facts ?? [],
+        cues: payload.cues ?? [],
         resume: payload.resume,
         cover: payload.cover,
+      });
+      setQueue((current) => {
+        const next = current.filter((item) => item.jd.trim() !== jd.trim());
+        localStorage.setItem(QUEUE_KEY, JSON.stringify(next));
+        return next;
       });
       setTab(payload.resume ? "resume" : "cover");
     } catch {
@@ -165,8 +193,32 @@ export function Studio() {
     }
   }
 
+  function useNext() {
+    const [next, ...rest] = queue;
+    if (!next) return;
+    setJd(next.jd);
+    setCompany(next.company);
+    setRole(next.role);
+    setResult(null);
+    setQueue(rest);
+    localStorage.setItem(QUEUE_KEY, JSON.stringify(rest));
+  }
+
   const slugCompany = company || "company";
   const slugRole = role || "role";
+
+  async function downloadPdf(filename: string, b64: string | null, path: string) {
+    setError("");
+    try {
+      if (b64) {
+        saveBase64(filename, b64);
+        return;
+      }
+      await downloadUrl(path, filename);
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "The PDF did not download.");
+    }
+  }
 
   return (
     <Box>
@@ -177,7 +229,16 @@ export function Studio() {
         Paste a job description. Desk picks from your profile, writes a one-page resume and a five-paragraph letter, and stops. You download the files and submit them yourself.
       </Typography>
 
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1.35fr 0.8fr" }, gap: 2.5 }}>
+      {queue.length > 0 && (
+        <Box sx={{ display: "flex", gap: 1.5, alignItems: "center", flexWrap: "wrap", mb: 2, p: 1.5, bgcolor: "background.paper", border: "1px solid", borderColor: "divider" }}>
+          <Typography>
+            {queue.length} description{queue.length === 1 ? "" : "s"} waiting. Next: {queue[0].company || "Company"} — {queue[0].role || "Role"}.
+          </Typography>
+          <Button variant="outlined" onClick={useNext}>Use the next one</Button>
+        </Box>
+      )}
+
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "minmax(360px, 0.85fr) minmax(0, 1.15fr)" }, gap: 2.5, alignItems: "start" }}>
         <Box>
           <TextField
             select
@@ -209,7 +270,7 @@ export function Studio() {
             minRows={14}
             fullWidth
             placeholder="Paste the posting here."
-            sx={{ "& textarea": { minHeight: 280 } }}
+            sx={{ "& textarea": { minHeight: { xs: 240, lg: 420 } } }}
           />
           <Button component="label" sx={{ mt: 1 }} variant="text">
             Upload a text or PDF file
@@ -303,6 +364,34 @@ export function Studio() {
 
       {result && (
         <Box sx={{ mt: 4 }}>
+          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 1.5, mb: 2 }}>
+            <Box sx={{ bgcolor: "background.paper", border: "1px solid", borderColor: "divider", p: 2 }}>
+              <Typography sx={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontSize: 22, mb: 1 }}>Page fill</Typography>
+              {result.resume && (
+                <Typography variant="body2">
+                  Resume: {result.resume.pages || 1} page{result.resume.pages === 1 ? "" : "s"}
+                  {result.resume.fill != null ? `, text reaches ${result.resume.fill}% of the page` : ""}.
+                </Typography>
+              )}
+              {result.cover && (
+                <Typography variant="body2">
+                  Letter: {result.cover.pages || 1} page{result.cover.pages === 1 ? "" : "s"}
+                  {result.cover.fill != null ? `, text reaches ${result.cover.fill}% of the page` : ""}.
+                </Typography>
+              )}
+            </Box>
+            <Box sx={{ bgcolor: "background.paper", border: "1px solid", borderColor: "divider", p: 2 }}>
+              <Typography sx={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontSize: 22, mb: 1 }}>Fact check</Typography>
+              <Typography variant="body2">
+                {result.facts.length > 0
+                  ? `Numbers on the page that are in the profile: ${result.facts.join(", ")}.`
+                  : "No numbers on this page."}
+              </Typography>
+              {result.cues.map((cue) => (
+                <Typography key={cue} variant="body2" sx={{ mt: 0.75 }}>{cue}</Typography>
+              ))}
+            </Box>
+          </Box>
           <Box sx={{ display: "flex", gap: 1, flexWrap: "wrap", mb: 2 }}>
             {result.resume && (
               <Button variant={tab === "resume" ? "contained" : "outlined"} onClick={() => setTab("resume")}>
@@ -314,8 +403,17 @@ export function Studio() {
                 Read the letter
               </Button>
             )}
-            {result.resume?.pdfBase64 && (
-              <Button variant="outlined" onClick={() => saveBase64(`${fileSlug(slugCompany, slugRole, "resume")}.pdf`, result.resume!.pdfBase64!)}>
+            {result.resume && (
+              <Button
+                variant="outlined"
+                onClick={() =>
+                  downloadPdf(
+                    `${fileSlug(slugCompany, slugRole, "resume")}.pdf`,
+                    result.resume!.pdfBase64,
+                    `/api/applications/${result.id}/pdf?doc=resume`,
+                  )
+                }
+              >
                 Resume PDF
               </Button>
             )}
@@ -324,8 +422,17 @@ export function Studio() {
                 Resume TeX
               </Button>
             )}
-            {result.cover?.pdfBase64 && (
-              <Button variant="outlined" onClick={() => saveBase64(`${fileSlug(slugCompany, slugRole, "letter")}.pdf`, result.cover!.pdfBase64!)}>
+            {result.cover && (
+              <Button
+                variant="outlined"
+                onClick={() =>
+                  downloadPdf(
+                    `${fileSlug(slugCompany, slugRole, "letter")}.pdf`,
+                    result.cover!.pdfBase64,
+                    `/api/applications/${result.id}/pdf?doc=cover`,
+                  )
+                }
+              >
                 Letter PDF
               </Button>
             )}

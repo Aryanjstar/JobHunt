@@ -10,6 +10,20 @@ function norm(token: string): string {
   return token.replace(/\s+/g, "").replace(/×/g, "x").replace(/,/g, "").toLowerCase();
 }
 
+export function factTrace(text: string, sources: string[]): { used: string[]; unknown: string[] } {
+  const unknown = [...new Set(unknownNumbers(text, sources))];
+  const blocked = new Set(unknown.map((token) => norm(token).replace(/\+$/, "")));
+  const used: string[] = [];
+  const seen = new Set<string>();
+  for (const token of numberTokens(text)) {
+    const value = norm(token).replace(/\+$/, "");
+    if (blocked.has(value) || seen.has(value)) continue;
+    seen.add(value);
+    used.push(token);
+  }
+  return { used, unknown };
+}
+
 export function unknownNumbers(text: string, sources: string[]): string[] {
   const allowed = new Set<string>();
   for (const source of sources) {

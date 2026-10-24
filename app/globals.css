@@ -5,7 +5,7 @@ body { font-family: var(--font-outfit), Helvetica, Arial, sans-serif; color: #1c
   background: #fffdf8;
   border: 1px solid #e0d8cc;
   padding: 28px 32px 36px;
-  max-width: 820px;
+  width: 100%;
 }
 .sheet-head { text-align: center; margin-bottom: 8px; }
 .sheet-head h2 {

@@ -21,7 +21,7 @@ npm test
 npm run test:e2e
 ```
 
-PDF compilation uses Tectonic (`/opt/homebrew/bin/tectonic`). The first run downloads LaTeX packages.
+PDF compilation uses Tectonic (`/opt/homebrew/bin/tectonic`) when it is installed. The first run downloads LaTeX packages. If Tectonic is missing, Desk still returns a one-page PDF of the same words.
 
 Set `APP_PASSWORD` before putting this anywhere but your own machine. The resume contains a phone number.
 

@@ -78,21 +78,23 @@ export function Shell({ children }: { children: React.ReactNode }) {
         </Box>
         <NavLinks onDark />
       </Box>
-      <Box sx={{ flex: 1, minWidth: 0 }}>
+      <Box sx={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <Box
           sx={{
             display: { xs: "flex", md: "none" },
             alignItems: "center",
-            justifyContent: "space-between",
+            gap: 1,
             px: 2,
-            py: 1.5,
+            py: 1.25,
             borderBottom: "1px solid #d9d0c2",
           }}
         >
-          <Box sx={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontSize: 24 }}>Desk</Box>
-          <NavLinks onDark={false} />
+          <Box sx={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontSize: 24, flexShrink: 0 }}>Desk</Box>
+          <Box sx={{ overflowX: "auto", flex: 1 }}>
+            <NavLinks onDark={false} />
+          </Box>
         </Box>
-        <Box component="main" sx={{ px: { xs: 2, md: 5 }, py: { xs: 3, md: 4 }, maxWidth: 1080 }}>
+        <Box component="main" sx={{ flex: 1, width: "100%", px: { xs: 2, sm: 3, lg: 4 }, py: { xs: 2, md: 3 } }}>
           {children}
         </Box>
       </Box>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { listingAllowed, stripHtml } from "../lib/jobs";
+import { listingAllowed, readPosting, stripHtml } from "../lib/jobs";
 import { buildPacket } from "../lib/pipeline";
 import { samples } from "../lib/samples";
 import { select } from "../lib/select";
@@ -62,12 +62,28 @@ describe("hostile input", () => {
 
   it("filters board titles and strips html", () => {
     expect(listingAllowed("AI Engineer", "Remote")).toBe(true);
+    expect(listingAllowed("Software Engineer", "Remote, Global")).toBe(true);
+    expect(listingAllowed("Software Engineer", "Remote, Canada")).toBe(false);
+    expect(listingAllowed("Software Engineer", "Remote, Poland")).toBe(false);
     expect(listingAllowed("Software Engineer", "Bengaluru, India")).toBe(true);
     expect(listingAllowed("Staff Software Engineer", "Remote")).toBe(false);
     expect(listingAllowed("Software Engineer Intern", "Remote")).toBe(false);
     expect(listingAllowed("Engineering Manager", "Remote")).toBe(false);
+    expect(listingAllowed("Backend Technical Lead", "Noida")).toBe(false);
+    expect(listingAllowed("Software Engineer", "Hyderabad")).toBe(true);
+    expect(listingAllowed("Software Engineer", "Pune, India")).toBe(true);
+    expect(listingAllowed("Software Engineer", "Hybrid")).toBe(false);
+    expect(listingAllowed("Software Engineer", "Hybrid in Bangalore, India")).toBe(true);
+    expect(listingAllowed("Software Engineer", "Redwood City, CA (Hybrid)")).toBe(false);
+    expect(listingAllowed("Software Engineer", "Hybrid - San Francisco")).toBe(false);
     expect(listingAllowed("Software Engineer", "San Francisco")).toBe(false);
     expect(listingAllowed("Designer", "Remote")).toBe(false);
     expect(stripHtml("<p>Kafka &amp; Rust</p><script>alert(1)</script>")).toBe("Kafka & Rust alert(1)");
+  });
+
+  it("refuses a linkedin link before any fetch", async () => {
+    expect(await readPosting("https://www.linkedin.com/jobs/view/123")).toBeNull();
+    expect(await readPosting("https://www.naukri.com/job-listings-1")).toBeNull();
+    expect(await readPosting("not a url")).toBeNull();
   });
 });

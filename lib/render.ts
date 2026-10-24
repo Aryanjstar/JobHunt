@@ -1,7 +1,11 @@
+import { analyzeJd } from "./jd";
 import { polishCover } from "./llm";
-import { compileTex } from "./pdf";
+import { resumeTex } from "./latex";
+import { factTrace } from "./guard";
+import { compileTex, pageFill } from "./pdf";
+import { preferences } from "./profile";
 import { buildPacket, withPolishedLetter, type Packet } from "./pipeline";
-import { DEFAULT_BUDGET, TIGHTER_BUDGETS } from "./select";
+import { DEFAULT_BUDGET, select, TIGHTER_BUDGETS } from "./select";
 import type { Budget } from "./types";
 
 export type RenderInput = {
@@ -22,12 +26,16 @@ export type Rendered = {
   coverPdf: Buffer | null;
   resumePages: number;
   coverPages: number;
+  resumeFill: number | null;
+  coverFill: number | null;
 };
 
-async function safeCompile(tex: string): Promise<{ pdf: Buffer | null; pages: number; error?: string }> {
+async function safeCompile(
+  tex: string,
+): Promise<{ pdf: Buffer | null; pages: number; engine?: "tectonic" | "fallback"; error?: string }> {
   try {
     const compiled = await compileTex(tex);
-    return { pdf: compiled.pdf, pages: compiled.pages };
+    return { pdf: compiled.pdf, pages: compiled.pages, engine: compiled.engine };
   } catch (error) {
     const message = error instanceof Error ? error.message : "TeX compile failed";
     return { pdf: null, pages: 0, error: message.split("\n")[0]?.slice(0, 240) };
@@ -50,6 +58,15 @@ export async function renderDocuments(input: RenderInput): Promise<Rendered> {
       if (compiled.error) {
         packet = { ...packet, warnings: [...packet.warnings, `Resume PDF failed: ${compiled.error}`] };
         break;
+      }
+      if (compiled.engine === "fallback") {
+        packet = {
+          ...packet,
+          warnings: [
+            ...packet.warnings,
+            "Tectonic did not produce a file, so this resume uses a simpler one-page layout. The words are the same.",
+          ],
+        };
       }
       if (resumePages > 0 && resumePages <= 1) break;
     }
@@ -83,6 +100,9 @@ export async function renderDocuments(input: RenderInput): Promise<Rendered> {
     }
   }
 
+  let resumeFill: number | null = null;
+  if (resumePdf) resumeFill = await pageFill(resumePdf).catch(() => null);
+
   let coverPdf: Buffer | null = null;
   let coverPages = 0;
   if (packet.coverTex) {
@@ -91,6 +111,14 @@ export async function renderDocuments(input: RenderInput): Promise<Rendered> {
     coverPages = compiled.pages;
     if (compiled.error) {
       packet = { ...packet, warnings: [...packet.warnings, `Cover letter PDF failed: ${compiled.error}`] };
+    } else if (compiled.engine === "fallback") {
+      packet = {
+        ...packet,
+        warnings: [
+          ...packet.warnings,
+          "Tectonic did not produce a file, so this letter uses a simpler one-page layout. The words are the same.",
+        ],
+      };
     } else if (coverPages > 1) {
       packet = {
         ...packet,
@@ -99,5 +127,30 @@ export async function renderDocuments(input: RenderInput): Promise<Rendered> {
     }
   }
 
-  return { packet, resumePdf, coverPdf, resumePages, coverPages };
+  let coverFill: number | null = null;
+  if (coverPdf) coverFill = await pageFill(coverPdf).catch(() => null);
+
+  const traced = factTrace(
+    [packet.resumePlain, packet.coverPlain].filter((part): part is string => Boolean(part)).join("\n"),
+    packet.sources,
+  );
+  if (traced.unknown.length > 0) {
+    packet = {
+      ...packet,
+      warnings: [
+        ...packet.warnings,
+        `Fact check found ${traced.unknown.join(", ")}, which is not in the profile. Read that line before you send it.`,
+      ],
+    };
+  }
+
+  return { packet, resumePdf, coverPdf, resumePages, coverPages, resumeFill, coverFill };
+}
+
+export async function pinnedResume(projectIds: string[]): Promise<Buffer> {
+  const jd = `${preferences.roles.join(", ")} in ${preferences.location}. ${preferences.workMode} ${preferences.employment}. Python, TypeScript, Next.js, React, FastAPI, Node.js, Azure, LangGraph.`;
+  const analysis = analyzeJd(jd, preferences.roles[0]);
+  const selection = select(jd, analysis, DEFAULT_BUDGET, projectIds);
+  const compiled = await compileTex(resumeTex(selection));
+  return compiled.pdf;
 }

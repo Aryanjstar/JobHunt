@@ -12,6 +12,8 @@ const KEY = "desk-projects";
 export default function ProjectsPage() {
   const choices = projects.filter((project) => project.onResume);
   const [pinned, setPinned] = useState<string[]>([]);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const saved = localStorage.getItem(KEY);
@@ -24,6 +26,34 @@ export default function ProjectsPage() {
     }
   }, []);
 
+  async function download() {
+    setBusy(true);
+    setError("");
+    try {
+      const response = await fetch("/api/resume", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ projectIds: pinned }),
+      });
+      const type = response.headers.get("content-type") ?? "";
+      if (!response.ok || !type.includes("pdf")) {
+        const payload = (await response.json().catch(() => null)) as { error?: string } | null;
+        setError(payload?.error || "The PDF did not download.");
+        return;
+      }
+      const url = URL.createObjectURL(await response.blob());
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "aryan-jaiswal-resume.pdf";
+      link.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      setError("The PDF did not download.");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   function pin(id: string) {
     setPinned((current) => {
       const next = current.includes(id) ? current.filter((item) => item !== id) : [...current, id].slice(-2);
@@ -34,8 +64,8 @@ export default function ProjectsPage() {
 
   return (
     <Box>
-      <Typography variant="h1" sx={{ fontSize: 42, mb: 1 }}>Projects</Typography>
-      <Typography sx={{ maxWidth: 640, mb: 3, color: "text.secondary" }}>
+      <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 46 }, mb: 1 }}>Projects</Typography>
+      <Typography sx={{ maxWidth: 760, mb: 3, color: "text.secondary" }}>
         Click two. They are the only projects on the next resume. The first words are action verbs, and a verb already used in the experience section is not used again. A number appears only when it is already in the profile.
       </Typography>
       <Box sx={{ display: "flex", gap: 1, mb: 2, flexWrap: "wrap" }}>
@@ -47,11 +77,17 @@ export default function ProjectsPage() {
             </Box>
           );
         })}
-        <Button component={NextLink} href="/studio" variant="contained" disabled={pinned.length !== 2}>
+        <Button variant="contained" disabled={pinned.length !== 2 || busy} onClick={download}>
+          {busy ? "Making the PDF…" : "Download resume"}
+        </Button>
+        <Button component={NextLink} href="/studio" variant="outlined" disabled={pinned.length !== 2}>
           Tailor with these
         </Button>
       </Box>
-      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 1.5 }}>
+      {error && (
+        <Typography sx={{ mb: 2, color: "secondary.main" }}>{error}</Typography>
+      )}
+      <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr", xl: "1fr 1fr 1fr" }, gap: 1.5 }}>
         {choices.map((project) => {
           const on = pinned.includes(project.id);
           return (
@@ -69,15 +105,15 @@ export default function ProjectsPage() {
                 p: 2,
               }}
             >
-              <Typography sx={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontSize: 22 }}>
+              <Typography component="span" sx={{ display: "block", fontFamily: "var(--font-fraunces), Georgia, serif", fontSize: 22 }}>
                 {project.name}
               </Typography>
-              <Typography variant="body2" sx={{ opacity: 0.8, mb: 1 }}>{project.stack}</Typography>
+              <Typography component="span" variant="body2" sx={{ display: "block", opacity: 0.8, mb: 1 }}>{project.stack}</Typography>
               {project.bullets.map((bullet) => (
-                <Typography key={bullet.id} variant="body2" sx={{ mb: 0.75 }}>{bullet.plain}</Typography>
+                <Typography component="span" key={bullet.id} variant="body2" sx={{ display: "block", mb: 0.75 }}>{bullet.plain}</Typography>
               ))}
               {project.note && (
-                <Typography variant="body2" sx={{ mt: 1, opacity: 0.75 }}>{project.note}</Typography>
+                <Typography component="span" variant="body2" sx={{ display: "block", mt: 1, opacity: 0.75 }}>{project.note}</Typography>
               )}
             </Box>
           );
