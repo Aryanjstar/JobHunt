@@ -1,6 +1,5 @@
 "use client";
 
-import Box from "@mui/material/Box";
 import type { Selection } from "@/lib/types";
 
 export type ResumePreview = {

@@ -137,10 +137,16 @@ export function select(
     budget.internBullets,
   );
   const resumeProjects = projects.filter((project) => project.onResume);
-  const pinnedProjects = pinned
-    .map((id) => resumeProjects.find((project) => project.id === id))
-    .filter((project): project is Project => Boolean(project))
-    .slice(0, 2);
+  const pinnedProjects: Project[] = [];
+  const seen = new Set<string>();
+  for (const id of pinned) {
+    if (seen.has(id)) continue;
+    const project = resumeProjects.find((item) => item.id === id);
+    if (!project) continue;
+    seen.add(id);
+    pinnedProjects.push(project);
+    if (pinnedProjects.length === 2) break;
+  }
   const aura = resumeProjects.find((project) => project.id === "aura");
   if (!aura) throw new Error("AURA is missing from the profile.");
   const ranked = [...resumeProjects]

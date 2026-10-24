@@ -1,4 +1,4 @@
-import type { Accomplishment, Bullet, Project, Role } from "./types";
+import type { Accomplishment, Project, Role } from "./types";
 
 /**
  * Single source of truth for Desk.

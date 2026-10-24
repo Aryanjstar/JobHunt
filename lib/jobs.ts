@@ -38,7 +38,13 @@ type GreenhouseJob = {
   content?: string;
 };
 
-function strip(html: string): string {
+export function listingAllowed(title: string, location: string): boolean {
+  if (!TITLE.test(title) || SKIP.test(title)) return false;
+  if (location && !PLACE.test(location)) return false;
+  return true;
+}
+
+export function stripHtml(html: string): string {
   return html
     .replace(/<[^>]+>/g, " ")
     .replace(/&nbsp;/g, " ")
@@ -64,7 +70,7 @@ async function readJob(board: Board, id: number): Promise<string> {
   );
   if (!response.ok) return "";
   const body = (await response.json()) as { content?: string };
-  return strip(body.content ?? "").slice(0, 6000);
+  return stripHtml(body.content ?? "").slice(0, 6000);
 }
 
 export async function findOpenings(): Promise<Opening[]> {
@@ -75,8 +81,7 @@ export async function findOpenings(): Promise<Opening[]> {
   for (const { board, jobs } of listed) {
     for (const job of jobs) {
       const place = job.location?.name ?? "";
-      if (!TITLE.test(job.title) || SKIP.test(job.title)) continue;
-      if (place && !PLACE.test(place)) continue;
+      if (!listingAllowed(job.title, place)) continue;
       candidates.push({ board, job });
     }
   }
