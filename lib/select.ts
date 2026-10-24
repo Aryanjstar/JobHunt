@@ -86,6 +86,10 @@ function scoreProject(project: Project, analysis: JdAnalysis, jd: string): numbe
   ) {
     score += 6;
   }
+  if (project.id === "digit" && /fnol|bolna|claims/.test(jd.toLowerCase())) score += 8;
+  if (project.id === "null" && /hacker house|transaction desk|unlimited approval/.test(jd.toLowerCase())) {
+    score += 8;
+  }
   return score;
 }
 
@@ -118,7 +122,12 @@ export function orderSkills(jd: string): { label: string; tokens: string[] }[] {
   });
 }
 
-export function select(jd: string, analysis: JdAnalysis, budget: Budget = DEFAULT_BUDGET): Selection {
+export function select(
+  jd: string,
+  analysis: JdAnalysis,
+  budget: Budget = DEFAULT_BUDGET,
+  pinned: string[] = [],
+): Selection {
   const fdeRole = roles[0];
   const internRole = roles[1];
   const fde = take(fdeRole.bullets, (bullet) => scoreBullet(bullet, analysis, jd), 2);
@@ -127,14 +136,23 @@ export function select(jd: string, analysis: JdAnalysis, budget: Budget = DEFAUL
     (bullet) => scoreBullet(bullet, analysis, jd),
     budget.internBullets,
   );
-  const aura = projects.find((project) => project.id === "aura");
+  const resumeProjects = projects.filter((project) => project.onResume);
+  const pinnedProjects = pinned
+    .map((id) => resumeProjects.find((project) => project.id === id))
+    .filter((project): project is Project => Boolean(project))
+    .slice(0, 2);
+  const aura = resumeProjects.find((project) => project.id === "aura");
   if (!aura) throw new Error("AURA is missing from the profile.");
-  const others = projects.filter((project) => project.onResume && project.id !== "aura");
-  const ranked = [...others].sort(
-    (a, b) => scoreProject(b, analysis, jd) - scoreProject(a, analysis, jd),
-  );
-  const second = ranked[0];
-  const chosen = [aura, second];
+  const ranked = [...resumeProjects]
+    .filter((project) => project.id !== "aura")
+    .sort((a, b) => scoreProject(b, analysis, jd) - scoreProject(a, analysis, jd));
+  const chosen =
+    pinnedProjects.length === 2
+      ? pinnedProjects
+      : pinnedProjects.length === 1
+        ? [pinnedProjects[0], ranked.find((project) => project.id !== pinnedProjects[0].id) ?? aura]
+        : [aura, ranked[0]];
+  const second = chosen[1] ?? chosen[0];
   const projectBullets: Record<string, Bullet[]> = {};
   for (const project of chosen) {
     projectBullets[project.id] = take(
@@ -169,7 +187,10 @@ export function select(jd: string, analysis: JdAnalysis, budget: Budget = DEFAUL
     projectBullets,
     accomplishments: picked,
     skills: orderSkills(jd),
-    secondProjectReason: secondProjectCopy[second.id] ?? "AURA stays first.",
+    secondProjectReason:
+      pinnedProjects.length === 2
+        ? "You pinned these two projects. The description does not replace that choice."
+        : (secondProjectCopy[second.id] ?? "AURA stays in the first slot."),
     experienceLetter,
     accomplishmentLetter,
   };

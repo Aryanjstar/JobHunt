@@ -3,7 +3,7 @@ import { samples } from "../lib/samples";
 
 test("a description becomes a resume and a letter you can read", async ({ page }) => {
   const ai = samples.find((item) => item.id === "ai")!;
-  await page.goto("/");
+  await page.goto("/studio");
   await expect(page.getByRole("heading", { name: "Make the documents" })).toBeVisible();
   await page.getByLabel("Job description").fill(ai.jd);
   await page.getByLabel("Company").fill(ai.company);
@@ -28,7 +28,7 @@ test("a description becomes a resume and a letter you can read", async ({ page }
 
 test("a product description selects The Wedding Home before any PDF", async ({ page }) => {
   const sample = samples.find((item) => item.id === "fullstack")!;
-  await page.goto("/");
+  await page.goto("/studio");
   await page.getByLabel("Job description").fill(sample.jd);
   await page.getByLabel("Role").fill(sample.role);
   await expect(page.getByText(/Wedding Home replaces Myriox/)).toBeVisible();
@@ -37,7 +37,7 @@ test("a product description selects The Wedding Home before any PDF", async ({ p
 
 test("a senior posting shows the blocker and still allows the documents", async ({ page }) => {
   const sample = samples.find((item) => item.id === "staff")!;
-  await page.goto("/");
+  await page.goto("/studio");
   await page.getByLabel("Job description").fill(sample.jd);
   await page.getByLabel("Role").fill(sample.role);
   await expect(page.getByText(/5 or more years/)).toBeVisible();

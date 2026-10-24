@@ -14,6 +14,7 @@ const schema = z.object({
   wantCover: z.boolean(),
   angle: z.string().max(500).optional(),
   polish: z.boolean().optional(),
+  projectIds: z.array(z.string()).max(2).optional(),
 });
 
 export async function POST(request: Request) {
@@ -37,6 +38,7 @@ export async function POST(request: Request) {
     wantCover: body.wantCover,
     angle: body.angle,
     polish: body.polish,
+    pinned: body.projectIds,
   });
   const { packet } = rendered;
   const id = randomUUID();

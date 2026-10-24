@@ -141,7 +141,7 @@ export const projects: Project[] = [
     name: "AURA – Agentic Finance AI",
     stack: "Azure OpenAI, Node.js, MongoDB, LangChain, Socket.IO",
     links: [
-      { label: "Live", url: "https://aura-finance-ai.azurewebsites.net" },
+      { label: "Live", url: "https://aura-finance-ai-in.azurewebsites.net" },
       { label: "GitHub", url: "https://github.com/Aryanjstar/AURA---THE-FINANCE-AI" },
       { label: "Demo", url: "https://www.youtube.com/watch?v=3q4uTliRNr8" },
     ],
@@ -192,9 +192,9 @@ export const projects: Project[] = [
       {
         id: "myriox-agents",
         latex:
-          "Built a \\textbf{multi-agent site simulator} with \\textbf{5 persona agents} on \\textbf{LangGraph}, a \\textbf{Next.js} app, and \\textbf{3 FastAPI} services, streaming a live walk over \\textbf{WebSocket} and writing a compliance report that cites \\textbf{ADA} and \\textbf{IFC} clauses.",
+          "Orchestrated a \\textbf{multi-agent site simulator} with \\textbf{5 persona agents} on \\textbf{LangGraph}, a \\textbf{Next.js} app, and \\textbf{3 FastAPI} services, streaming a live walk over \\textbf{WebSocket} and writing a compliance report that cites \\textbf{ADA} and \\textbf{IFC} clauses.",
         plain:
-          "Built a multi-agent site simulator with 5 persona agents on LangGraph, a Next.js app, and 3 FastAPI services, streaming a live walk over WebSocket and writing a compliance report that cites ADA and IFC clauses.",
+          "Orchestrated a multi-agent site simulator with 5 persona agents on LangGraph, a Next.js app, and 3 FastAPI services, streaming a live walk over WebSocket and writing a compliance report that cites ADA and IFC clauses.",
         letter:
           "Myriox is a site simulator I built with Next.js, 3 FastAPI services, and LangGraph agents for 5 personas, streaming a live walk and citing ADA and IFC clauses.",
         asset: "a multi-agent simulator that cites the clause, not a vague warning",
@@ -203,9 +203,9 @@ export const projects: Project[] = [
       {
         id: "myriox-deploy",
         latex:
-          "Deployed the auth, plan, and simulation services on \\textbf{Azure Container Apps} with \\textbf{Cosmos DB} and bcrypt-hashed \\textbf{JWTs}, and shipped an \\textbf{MCP} plan server so other tools can read a layout without opening the editor.",
+          "Launched the auth, plan, and simulation services on \\textbf{Azure Container Apps} with \\textbf{Cosmos DB} and bcrypt-hashed \\textbf{JWTs}, and added an \\textbf{MCP} plan server so other tools can read a layout without opening the editor.",
         plain:
-          "Deployed the auth, plan, and simulation services on Azure Container Apps with Cosmos DB and bcrypt-hashed JWTs, and shipped an MCP plan server so other tools can read a layout without opening the editor.",
+          "Launched the auth, plan, and simulation services on Azure Container Apps with Cosmos DB and bcrypt-hashed JWTs, and added an MCP plan server so other tools can read a layout without opening the editor.",
         letter:
           "The auth, plan, and simulation services run on Azure Container Apps with Cosmos DB, and an MCP plan server exposes the layout to other tools.",
         asset: "services deployed on Azure, with an MCP server beside them",
@@ -229,9 +229,9 @@ export const projects: Project[] = [
       {
         id: "wedding-product",
         latex:
-          "Built \\textbf{The Wedding Home}, a family workspace and a no-login guest website for Indian weddings, with per-function \\textbf{RSVP}, household \\textbf{WhatsApp} links, reminder jobs, a rupee spend log, and a shared photo gallery on \\textbf{Next.js} and \\textbf{MongoDB}.",
+          "Shipped \\textbf{The Wedding Home}, a family workspace and a no-login guest website for Indian weddings, with per-function \\textbf{RSVP}, household \\textbf{WhatsApp} links, reminder jobs, a rupee spend log, and a shared photo gallery on \\textbf{Next.js} and \\textbf{MongoDB}.",
         plain:
-          "Built The Wedding Home, a family workspace and a no-login guest website for Indian weddings, with per-function RSVP, household WhatsApp links, reminder jobs, a rupee spend log, and a shared photo gallery on Next.js and MongoDB.",
+          "Shipped The Wedding Home, a family workspace and a no-login guest website for Indian weddings, with per-function RSVP, household WhatsApp links, reminder jobs, a rupee spend log, and a shared photo gallery on Next.js and MongoDB.",
         letter:
           "The Wedding Home is a family workspace and a no-login guest site I built for Indian weddings, with per-function RSVP, reminders, and a shared gallery, on Next.js and MongoDB.",
         asset: "a whole product, family workspace and guest site, shipped",
@@ -240,9 +240,9 @@ export const projects: Project[] = [
       {
         id: "wedding-themes",
         latex:
-          "Shipped \\textbf{4} guest-site themes and \\textbf{22} original music pieces, \\textbf{OpenStreetMap} vendor search, and a gallery \\textbf{QR}, and deployed the product on \\textbf{Vercel}.",
+          "Styled \\textbf{4} guest-site themes and \\textbf{22} original music pieces, \\textbf{OpenStreetMap} vendor search, and a gallery \\textbf{QR}, and placed the product on \\textbf{Vercel}.",
         plain:
-          "Shipped 4 guest-site themes and 22 original music pieces, OpenStreetMap vendor search, and a gallery QR, and deployed the product on Vercel.",
+          "Styled 4 guest-site themes and 22 original music pieces, OpenStreetMap vendor search, and a gallery QR, and placed the product on Vercel.",
         letter:
           "It ships with 4 guest-site themes and 22 original music pieces, OpenStreetMap vendor search, and a gallery QR, live on Vercel.",
         asset: "a guest experience with its own themes, music, and map",
@@ -307,9 +307,9 @@ export const projects: Project[] = [
       {
         id: "navigator-rag",
         latex:
-          "Architected and deployed a scalable AI career assistant using \\textbf{Azure OpenAI GPT-4.1} with \\textbf{RAG} (chunking, embeddings, vector store) and dynamic interview generators; validated by \\textbf{100+} users for resume feedback and gap analysis.",
+          "Delivered a scalable AI career assistant using \\textbf{Azure OpenAI GPT-4.1} with \\textbf{RAG} (chunking, embeddings, vector store) and dynamic interview generators; validated by \\textbf{100+} users for resume feedback and gap analysis.",
         plain:
-          "Architected and deployed a scalable AI career assistant using Azure OpenAI GPT-4.1 with RAG (chunking, embeddings, vector store) and dynamic interview generators; validated by 100+ users for resume feedback and gap analysis.",
+          "Delivered a scalable AI career assistant using Azure OpenAI GPT-4.1 with RAG (chunking, embeddings, vector store) and dynamic interview generators; validated by 100+ users for resume feedback and gap analysis.",
         letter:
           "AI Career Navigator is a career assistant I led on Azure OpenAI GPT-4.1 with RAG and interview practice, validated by 100+ users.",
         asset: "a career assistant that won a Microsoft build-a-thon",
@@ -318,9 +318,9 @@ export const projects: Project[] = [
       {
         id: "navigator-scale",
         latex:
-          "Deployed and scaled microservices on \\textbf{Azure App Service} with queue workers and \\textbf{Azure AI Search}, ensuring \\textbf{99\\%} uptime while handling \\textbf{500+} requests via batching and sharding; integrated A/B pipelines, reducing user prep time by \\textbf{60\\%}.",
+          "Reduced user prep time by \\textbf{60\\%} on \\textbf{Azure App Service} with queue workers and \\textbf{Azure AI Search}, holding \\textbf{99\\%} uptime across \\textbf{500+} requests.",
         plain:
-          "Deployed and scaled microservices on Azure App Service with queue workers and Azure AI Search, ensuring 99% uptime while handling 500+ requests via batching and sharding; integrated A/B pipelines, reducing user prep time by 60%.",
+          "Reduced user prep time by 60% on Azure App Service with queue workers and Azure AI Search, holding 99% uptime across 500+ requests.",
         letter:
           "The service ran on Azure App Service and Azure AI Search at 99% uptime across 500+ requests, and cut prep time by 60%.",
         asset: "a shipped Azure service with a measured drop in prep time",
@@ -354,9 +354,9 @@ export const projects: Project[] = [
       {
         id: "portfolio-3d",
         latex:
-          "Composed the 3D scenes in \\textbf{Three.js} and kept the layout coherent across phone and desktop breakpoints.",
+          "Modeled the 3D scenes in \\textbf{Three.js} and kept the layout coherent across phone and desktop breakpoints.",
         plain:
-          "Composed the 3D scenes in Three.js and kept the layout coherent across phone and desktop breakpoints.",
+          "Modeled the 3D scenes in Three.js and kept the layout coherent across phone and desktop breakpoints.",
         letter:
           "The 3D scenes are Three.js, and the layout holds together on phone and desktop.",
         asset: "interface work I shipped, including the 3D scenes",
@@ -364,32 +364,148 @@ export const projects: Project[] = [
       },
     ],
   },
+  {
+    id: "null",
+    name: "Null",
+    stack: "Voice UI, HTML",
+    links: [{ label: "GitHub", url: "https://github.com/Aryanjstar/Null" }],
+    onResume: true,
+    lean: { voice: 2, ai: 1, frontend: 1 },
+    keywords: ["voice", "transaction", "plan"],
+    note: "Hacker House Goa 2026. No accuracy figure exists, so none is claimed.",
+    bullets: [
+      {
+        id: "null-plan",
+        latex:
+          "Translated a spoken send, swap, stake, or approve into a plan card that is allowed or refused, and refused an unlimited approval or an approval to a random address.",
+        plain:
+          "Translated a spoken send, swap, stake, or approve into a plan card that is allowed or refused, and refused an unlimited approval or an approval to a random address.",
+        letter:
+          "Null turns a spoken send, swap, stake, or approve into a plan card, and it refuses an unlimited approval.",
+        asset: "a voice desk that refuses the dangerous action",
+        keywords: ["voice", "transaction"],
+      },
+      {
+        id: "null-local",
+        latex:
+          "Published the desk as one HTML page for Hacker House Goa 2026, with no server and no API key, and nothing is signed or sent.",
+        plain:
+          "Published the desk as one HTML page for Hacker House Goa 2026, with no server and no API key, and nothing is signed or sent.",
+        letter:
+          "It is one page, built for Hacker House Goa 2026, and it never signs or sends a transaction.",
+        asset: "a demo that stops before anything is sent",
+        keywords: ["voice"],
+      },
+    ],
+  },
+  {
+    id: "raya",
+    name: "Raya Pay",
+    stack: "FastAPI, Next.js, PostgreSQL, Azure",
+    links: [
+      { label: "Live", url: "https://raya-web-da26.azurewebsites.net" },
+      { label: "GitHub", url: "https://github.com/Aryanjstar/raya-pay" },
+    ],
+    onResume: true,
+    lean: { fullstack: 4, backend: 4, sde: 3 },
+    keywords: ["fastapi", "next.js", "postgresql", "azure", "payments"],
+    note: "No user or volume figure is public, so none is claimed.",
+    bullets: [
+      {
+        id: "raya-app",
+        latex:
+          "Assembled \\textbf{Raya Pay}, a \\textbf{FastAPI} and \\textbf{Next.js} app on \\textbf{PostgreSQL} for paying a credit-card bill, earning reward coins, and reading spending, and ran it on \\textbf{Azure}.",
+        plain:
+          "Assembled Raya Pay, a FastAPI and Next.js app on PostgreSQL for paying a credit-card bill, earning reward coins, and reading spending, and ran it on Azure.",
+        letter:
+          "Raya Pay is a FastAPI and Next.js app on PostgreSQL, deployed on Azure, for credit-card bills and a spending view.",
+        asset: "a payments app with the bill, the coins, and the spending view split apart",
+        keywords: ["fastapi", "next.js", "postgresql", "azure"],
+      },
+      {
+        id: "raya-split",
+        latex:
+          "Separated bill payment, reward coins, and the spending view so each step has its own screen instead of one crowded form.",
+        plain:
+          "Separated bill payment, reward coins, and the spending view so each step has its own screen instead of one crowded form.",
+        letter: "Bill payment, reward coins, and spending each have their own screen.",
+        asset: "a payment flow split into steps a person can follow",
+        keywords: ["payments", "next.js"],
+      },
+    ],
+  },
+  {
+    id: "digit",
+    name: "Digit motor FNOL",
+    stack: "Bolna, voice agent, claims API",
+    links: [{ label: "GitHub", url: "https://github.com/Aryanjstar/digit-motor-fnol-voice-agent" }],
+    onResume: true,
+    lean: { voice: 2, ai: 1 },
+    keywords: ["voice", "claims", "confirmation"],
+    note: "A demo. No call-volume figure, so none is claimed.",
+    bullets: [
+      {
+        id: "digit-gate",
+        latex:
+          "Guarded a motor FNOL voice agent so a claim moves forward only after the caller confirms the details.",
+        plain:
+          "Guarded a motor FNOL voice agent so a claim moves forward only after the caller confirms the details.",
+        letter:
+          "The Digit-style FNOL agent files nothing until the caller confirms the claim details.",
+        asset: "a voice claim flow that waits for a confirmation",
+        keywords: ["voice", "claims"],
+      },
+      {
+        id: "digit-api",
+        latex:
+          "Connected a \\textbf{Bolna} voice agent to a confirmation-gated claims API instead of writing the claim on the first utterance.",
+        plain:
+          "Connected a Bolna voice agent to a confirmation-gated claims API instead of writing the claim on the first utterance.",
+        letter: "A Bolna voice agent sits on a claims API that stays closed until the confirmation.",
+        asset: "a claims API that does not fire early",
+        keywords: ["voice"],
+      },
+    ],
+  },
+  {
+    id: "plant",
+    name: "Plant disease classification",
+    stack: "Python, CNN, Flask",
+    links: [{ label: "GitHub", url: "https://github.com/Aryanjstar/Plant_Disease_Classification" }],
+    onResume: true,
+    lean: { ai: 3 },
+    keywords: ["cnn", "python", "flask", "vision"],
+    note: "90%+ is the public repo description. 60,000+ images is self-reported from the portfolio.",
+    bullets: [
+      {
+        id: "plant-train",
+        latex:
+          "Trained a plant-leaf \\textbf{CNN} to \\textbf{90\\%+} accuracy and wrapped it in a \\textbf{Flask} app for a photo in and a disease label out.",
+        plain:
+          "Trained a plant-leaf CNN to 90%+ accuracy and wrapped it in a Flask app for a photo in and a disease label out.",
+        letter:
+          "I trained a plant-disease CNN to 90%+ accuracy and served it from Flask.",
+        asset: "a vision model with a measured accuracy and a small web app around it",
+        keywords: ["cnn", "flask", "python"],
+      },
+      {
+        id: "plant-data",
+        latex:
+          "Classified disease on \\textbf{60,000+} leaf images during the Infosys Springboard internship, and kept the result as a label a farmer can read.",
+        plain:
+          "Classified disease on 60,000+ leaf images during the Infosys Springboard internship, and kept the result as a label a farmer can read.",
+        letter: "The training set was 60,000+ leaf images from the Infosys Springboard internship.",
+        asset: "a classifier trained on a large public leaf set",
+        keywords: ["vision", "python"],
+      },
+    ],
+  },
 ];
 
 export const bank: { name: string; line: string; url?: string }[] = [
   {
-    name: "Null",
-    line: "A one-page voice transaction desk for Hacker House Goa 2026. A plan card is allowed or refused. Nothing is signed and nothing is sent.",
-    url: "https://github.com/Aryanjstar/Null",
-  },
-  {
-    name: "Plant disease classification",
-    line: "Public repo: a CNN over plant leaves, described there as 90%+ accuracy, with a Flask web app. Infosys Springboard internship, self-reported on the portfolio as 60,000+ images.",
-    url: "https://github.com/Aryanjstar/Plant_Disease_Classification",
-  },
-  {
     name: "Joveo",
     line: "AI/ML intern, supply automation. Self-reported: a RAG pipeline with n8n, Gemini embeddings, and pgvector.",
-  },
-  {
-    name: "Raya Pay",
-    line: "FastAPI, Next.js, and PostgreSQL app for credit-card bills, deployed on Azure.",
-    url: "https://github.com/Aryanjstar/raya-pay",
-  },
-  {
-    name: "Digit motor FNOL voice agent",
-    line: "Bolna voice-agent demo with a confirmation-gated claims API.",
-    url: "https://github.com/Aryanjstar/digit-motor-fnol-voice-agent",
   },
   {
     name: "FreelanceGuard",

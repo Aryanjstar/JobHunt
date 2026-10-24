@@ -37,9 +37,10 @@ export function buildPacket(input: {
   angle?: string;
   budget?: Budget;
   date?: Date;
+  pinned?: string[];
 }): Packet {
   const analysis = analyzeJd(input.jd, input.role);
-  const selection = select(input.jd, analysis, input.budget ?? DEFAULT_BUDGET);
+  const selection = select(input.jd, analysis, input.budget ?? DEFAULT_BUDGET, input.pinned);
   const sources = coverSources(selection);
   const warnings: string[] = [];
   let letter: Letter | null = null;

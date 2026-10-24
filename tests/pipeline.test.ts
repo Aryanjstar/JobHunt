@@ -143,6 +143,30 @@ describe("tailoring across roles", () => {
     expect(accepted.paragraphs.join(" ")).not.toMatch(/40%/);
   });
 
+  it("keeps every action verb unique and honors a pinned pair", () => {
+    for (const sample of samples) {
+      const packet = packetFor(sample.id);
+      const bullets = [
+        ...packet.selection.fde,
+        ...packet.selection.intern,
+        ...packet.selection.projects.flatMap((project) => packet.selection.projectBullets[project.id] ?? []),
+      ];
+      const verbs = bullets.map((bullet) => bullet.plain.split(/\s+/)[0]);
+      expect(new Set(verbs).size, sample.id).toBe(verbs.length);
+    }
+    const pinned = buildPacket({
+      jd: samples[0].jd,
+      company: "Northstar",
+      role: "AI Engineer",
+      wantResume: true,
+      wantCover: true,
+      date: fixed,
+      pinned: ["wedding-home", "null"],
+    });
+    expect(pinned.selection.projects.map((project) => project.id)).toEqual(["wedding-home", "null"]);
+    expect(pinned.selection.secondProjectReason).toMatch(/pinned/);
+  });
+
   it("renders resume source from canonical bullets only", () => {
     const packet = packetFor("ai");
     const tex = resumeTex(packet.selection);

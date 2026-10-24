@@ -4,6 +4,6 @@ import { llmConfigured } from "@/lib/llm";
 export function GET() {
   return NextResponse.json({
     llm: llmConfigured(),
-    model: process.env.AZURE_OPENAI_DEPLOYMENT || null,
+    model: process.env.AZURE_OPENAI_MODEL || process.env.AZURE_OPENAI_DEPLOYMENT || null,
   });
 }

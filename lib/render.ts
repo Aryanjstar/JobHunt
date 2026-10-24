@@ -13,6 +13,7 @@ export type RenderInput = {
   angle?: string;
   polish?: boolean;
   date?: Date;
+  pinned?: string[];
 };
 
 export type Rendered = {

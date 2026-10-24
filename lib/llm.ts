@@ -29,6 +29,7 @@ export async function polishCover(input: {
     },
     body: JSON.stringify({
       temperature: 0.2,
+      max_completion_tokens: 1200,
       response_format: { type: "json_object" },
       messages: [
         {

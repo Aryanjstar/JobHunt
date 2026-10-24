@@ -6,7 +6,10 @@ import Box from "@mui/material/Box";
 import Link from "@mui/material/Link";
 
 const items = [
-  { href: "/", label: "Studio" },
+  { href: "/", label: "Home" },
+  { href: "/studio", label: "Tailor" },
+  { href: "/projects", label: "Projects" },
+  { href: "/jobs", label: "Shortlist" },
   { href: "/profile", label: "Profile" },
   { href: "/log", label: "Log" },
 ];
@@ -65,7 +68,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
         }}
       >
         <Box>
-          <Box sx={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontSize: 32, lineHeight: 1 }}>Desk</Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.25 }}>
+            <Box component="img" src="/mark.svg" alt="" sx={{ width: 28, height: 28 }} />
+            <Box sx={{ fontFamily: "var(--font-fraunces), Georgia, serif", fontSize: 32, lineHeight: 1 }}>Desk</Box>
+          </Box>
           <Box sx={{ mt: 1, color: "#cfc3b0", fontSize: 13, lineHeight: 1.4 }}>
             One profile. One description. Nothing is sent.
           </Box>

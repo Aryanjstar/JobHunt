@@ -13,7 +13,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import Typography from "@mui/material/Typography";
 import { analyzeJd } from "@/lib/jd";
 import { samples } from "@/lib/samples";
-import { select } from "@/lib/select";
+import { DEFAULT_BUDGET, select } from "@/lib/select";
 import { LetterSheet, ResumeSheet, selectionPreview, type ResumePreview } from "./Preview";
 
 type Docs = "resume" | "cover";
@@ -65,24 +65,50 @@ export function Studio() {
   const [docs, setDocs] = useState<Docs[]>(["resume", "cover"]);
   const [polish, setPolish] = useState(false);
   const [llm, setLlm] = useState(false);
+  const [model, setModel] = useState("the profile");
+  const [pinned, setPinned] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [tab, setTab] = useState<"resume" | "cover">("resume");
   const [result, setResult] = useState<Generated | null>(null);
 
   useEffect(() => {
+    const saved = localStorage.getItem("desk-projects");
+    if (saved) {
+      try {
+        const ids = JSON.parse(saved) as string[];
+        if (Array.isArray(ids)) setPinned(ids.slice(0, 2));
+      } catch {
+        /* keep the default pair */
+      }
+    }
+    const prepared = sessionStorage.getItem("desk-prepare");
+    if (prepared) {
+      sessionStorage.removeItem("desk-prepare");
+      try {
+        const job = JSON.parse(prepared) as { jd?: string; company?: string; role?: string };
+        if (job.jd) setJd(job.jd);
+        if (job.company) setCompany(job.company);
+        if (job.role) setRole(job.role);
+      } catch {
+        /* ignore a bad handoff */
+      }
+    }
     fetch("/api/status")
       .then((response) => response.json())
-      .then((body: { llm?: boolean }) => setLlm(Boolean(body.llm)))
+      .then((body: { llm?: boolean; model?: string | null }) => {
+        setLlm(Boolean(body.llm));
+        if (body.model) setModel(body.model);
+      })
       .catch(() => setLlm(false));
   }, []);
 
   const live = useMemo(() => {
     if (jd.trim().length < 40) return null;
     const analysis = analyzeJd(jd, role || "Software Engineer");
-    const selection = select(jd, analysis);
+    const selection = select(jd, analysis, DEFAULT_BUDGET, pinned);
     return { analysis, selection };
-  }, [jd, role]);
+  }, [jd, role, pinned]);
 
   async function onFile(file: File | undefined) {
     if (!file) return;
@@ -117,6 +143,7 @@ export function Studio() {
           wantCover: docs.includes("cover"),
           angle,
           polish,
+          projectIds: pinned,
         }),
       });
       const payload = await response.json();
@@ -219,7 +246,7 @@ export function Studio() {
           {llm ? (
             <FormControlLabel
               control={<Checkbox checked={polish} onChange={(event) => setPolish(event.target.checked)} />}
-              label="Tighten the letter with GPT-4.1. Facts that do not trace back are thrown out."
+              label={`Tighten the letter with ${model}. A number or tool that is not in the profile is thrown out.`}
             />
           ) : (
             <Typography variant="body2" color="text.secondary">
