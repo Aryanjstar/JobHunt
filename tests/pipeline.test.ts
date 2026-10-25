@@ -31,7 +31,7 @@ describe("tailoring across roles", () => {
     expect(packet.letter?.paragraphs[4]).toMatch(/would make me a valuable asset/);
     expect(packet.letter?.paragraphs[0]).toMatch(/Northstar/);
     expect(packet.letter?.paragraphs[0]).toMatch(/RAG, agents, and Azure/);
-    expect(packet.coverPlain).toMatch(/80\+|COMSNETS|Pablo Veramendi|MSA Nexus/);
+    expect(packet.coverPlain).toMatch(/80\+|COMSNETS|Pablo Veramendi|MSA Nexus|Azure AI Apps and Agents/);
     expect(packet.coverPlain).not.toMatch(/57,000/);
     expect(packet.coverPlain).toMatch(/AURA/);
     expect(packet.coverPlain).toMatch(/Myriox/);

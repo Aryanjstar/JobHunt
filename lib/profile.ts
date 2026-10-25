@@ -176,7 +176,7 @@ export const projects: Project[] = [
   {
     id: "myriox",
     name: "Myriox",
-    stack: "Next.js, FastAPI, LangGraph, Cosmos DB, Azure",
+    stack: "Next.js, FastAPI, LangGraph, Azure OpenAI, Cosmos DB, Azure",
     links: [
       {
         label: "Live",
@@ -192,24 +192,24 @@ export const projects: Project[] = [
       {
         id: "myriox-agents",
         latex:
-          "Orchestrated a \\textbf{multi-agent site simulator} with \\textbf{5 persona agents} on \\textbf{LangGraph}, a \\textbf{Next.js} app, and \\textbf{3 FastAPI} services, streaming a live walk over \\textbf{WebSocket} and writing a compliance report that cites \\textbf{ADA} and \\textbf{IFC} clauses.",
+          "Shipped and deployed a \\textbf{site-plan stress-testing platform} with a \\textbf{Next.js} editor and \\textbf{LangGraph} agents that simulate \\textbf{five personas}, streaming real-time movement and bottlenecks over \\textbf{WebSockets}.",
         plain:
-          "Orchestrated a multi-agent site simulator with 5 persona agents on LangGraph, a Next.js app, and 3 FastAPI services, streaming a live walk over WebSocket and writing a compliance report that cites ADA and IFC clauses.",
+          "Shipped and deployed a site-plan stress-testing platform with a Next.js editor and LangGraph agents that simulate five personas, streaming real-time movement and bottlenecks over WebSockets.",
         letter:
-          "Myriox is a site simulator I built with Next.js, 3 FastAPI services, and LangGraph agents for 5 personas, streaming a live walk and citing ADA and IFC clauses.",
-        asset: "a multi-agent simulator that cites the clause, not a vague warning",
-        keywords: ["agent", "langgraph", "fastapi", "websocket", "evaluation"],
+          "Myriox is a site-plan stress-testing platform I shipped and deployed, with a Next.js editor and LangGraph agents that simulate five personas and stream movement and bottlenecks over WebSockets.",
+        asset: "a stress-testing platform that simulates five personas live",
+        keywords: ["agent", "langgraph", "next.js", "websocket", "simulation"],
       },
       {
         id: "myriox-deploy",
         latex:
-          "Launched the auth, plan, and simulation services on \\textbf{Azure Container Apps} with \\textbf{Cosmos DB} and bcrypt-hashed \\textbf{JWTs}, and added an \\textbf{MCP} plan server so other tools can read a layout without opening the editor.",
+          "Delivered a \\textbf{RAG-backed} ADA/IFC auditor using \\textbf{Azure OpenAI} and \\textbf{Cosmos DB} vector search for clause-cited findings; secured multi-tenant data with bcrypt/JWT and deployed \\textbf{4 Azure Container Apps}.",
         plain:
-          "Launched the auth, plan, and simulation services on Azure Container Apps with Cosmos DB and bcrypt-hashed JWTs, and added an MCP plan server so other tools can read a layout without opening the editor.",
+          "Delivered a RAG-backed ADA/IFC auditor using Azure OpenAI and Cosmos DB vector search for clause-cited findings; secured multi-tenant data with bcrypt/JWT and deployed 4 Azure Container Apps.",
         letter:
-          "The auth, plan, and simulation services run on Azure Container Apps with Cosmos DB, and an MCP plan server exposes the layout to other tools.",
-        asset: "services deployed on Azure, with an MCP server beside them",
-        keywords: ["azure", "mcp", "cosmos", "jwt"],
+          "It is backed by a RAG auditor on Azure OpenAI and Cosmos DB vector search for clause-cited ADA/IFC findings, with multi-tenant data secured by bcrypt and JWT, deployed across 4 Azure Container Apps.",
+        asset: "a RAG auditor that cites the clause, deployed across 4 Container Apps",
+        keywords: ["azure", "rag", "cosmos", "jwt", "bcrypt"],
       },
     ],
   },
@@ -553,11 +553,11 @@ export const accomplishments: Accomplishment[] = [
     keywords: ["mentor", "microsoft", "community", "career", "azure"],
     asset: "a Troop Lead win at a Microsoft build-a-thon",
     plain:
-      "Microsoft JS AI Build-a-thon: People's Choice and Overall Winner. As Troop Lead, mentored 80+ developers and led AI Career Navigator.",
+      "Microsoft JS AI Build-a-thon: People's Choice and Overall Winner. As Troop Lead, mentored 80+ developers and led the creation of AI Career Navigator to plan and assist students in job and internship preparation.",
     letter:
-      "As Troop Lead for the Microsoft JS AI Build-a-thon I mentored 80+ developers, and AI Career Navigator won People's Choice and Overall Winner.",
+      "As Troop Lead for the Microsoft JS AI Build-a-thon I mentored 80+ developers and led the creation of AI Career Navigator, which won People's Choice and Overall Winner.",
     latex:
-      "\\textbf{\\href{https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/main/README.md}{Microsoft JS AI Build-a-thon}}: \\textbf{People's Choice \\& Overall Winner}. As the \\href{https://www.credly.com/badges/78eec55a-554b-4706-8990-261e20b92fc9/linked_in_profile}{Troop Lead}, I mentored \\textbf{80+} developers and led \\href{https://ai-career-navigator-backend.azurewebsites.net/}{\\textcolor{blue}{AI Career Navigator}}. (\\href{https://techcommunity.microsoft.com/blog/educatordeveloperblog/ai-career-navigator-\\%E2\\%80\\%94-empowering-job-seekers-with-azure-openai/4459774}{\\textcolor{blue}{TechCommunity Blog}})",
+      "\\textbf{\\href{https://github.com/Azure-Samples/JS-AI-Build-a-thon/blob/main/README.md}{Microsoft JS AI Build-a-thon}}: \\textbf{People's Choice \\& Overall Winner}. As the \\href{https://www.credly.com/badges/78eec55a-554b-4706-8990-261e20b92fc9/linked_in_profile}{Troop Lead}, I mentored \\textbf{80+} developers and led the creation of \\href{https://ai-career-navigator-backend.azurewebsites.net/}{\\textcolor{blue}{AI Career Navigator}} to \\textbf{plan and assist} students in job and internship preparation. (\\href{https://techcommunity.microsoft.com/blog/educatordeveloperblog/ai-career-navigator-\\%E2\\%80\\%94-empowering-job-seekers-with-azure-openai/4459774}{\\textcolor{blue}{TechCommunity Blog}})",
   },
   {
     id: "google-hackathon",
@@ -572,16 +572,16 @@ export const accomplishments: Accomplishment[] = [
       "\\textbf{\\href{https://drive.google.com/file/d/1pKSY7Rol-mGALg7XRb_uN9UDeuLEH3ZP/view?usp=sharing}{Finalist -- Google Cloud Agentic AI Day Hackathon}}: Led my team to the top \\textbf{3.5\\%} (2,000/57,000+) by building \\href{https://github.com/Aryanjstar/AURA---THE-FINANCE-AI}{\\textcolor{blue}{AURA}}, a multi-agent financial platform using Gemini, Node.js, Go, and \\textbf{Fi's Model Context Protocol (MCP) server}.",
   },
   {
-    id: "lor",
-    base: 6,
-    keywords: ["microsoft", "mentor", "community", "certification"],
-    asset: "a Microsoft letter of recommendation and the AI-900",
+    id: "ai-certifications",
+    base: 4,
+    keywords: ["certification", "azure", "ai", "github", "agentic"],
+    asset: "three current AI certifications, from Azure to GitHub's agentic track",
     plain:
-      "Letter of recommendation from Pablo Veramendi, Global Director, Audience Evangelism at Microsoft, for event leadership, workshops, community building, and mentoring. AI-900 certified.",
+      "AI Certifications: Microsoft Certified Azure AI Apps and Agents Developer Associate (Azure AI solution lifecycle, GenAI and agents, vision, language, and information extraction); Microsoft Certified Azure AI Fundamentals (AI concepts and Microsoft Foundry); GitHub Certified GH-600: Developing in Agentic AI Systems (Beta).",
     letter:
-      "I have a letter of recommendation from Pablo Veramendi, Global Director, Audience Evangelism at Microsoft, and I hold the AI-900 certification.",
+      "I hold the Microsoft Certified: Azure AI Apps and Agents Developer Associate and Azure AI Fundamentals certifications, plus GitHub's GH-600 Developing in Agentic AI Systems (Beta).",
     latex:
-      "\\textbf{LOR (Microsoft)}: Received it from \\href{https://www.linkedin.com/in/pveramendi}{\\textcolor{blue}{Pablo Veramendi}}, Global Director, Audience Evangelism at Microsoft; \\href{https://drive.google.com/file/d/1fPSHlkk8T89CJ55hPlJQ-sDO-dwutkxM/view?usp=sharing}{\\textcolor{blue}{LOR}} recognizes event leadership, workshops, community building and mentoring; \\href{https://learn.microsoft.com/en-in/users/aryanjstar/credentials/e4c4296f82bdf8ad}{\\textcolor{blue}{\\textbf{AI-900 Certified}}}.",
+      "\\textbf{AI Certifications}: \\href{https://learn.microsoft.com/en-us/users/aryanjstar/credentials/certification/azure-ai-apps-and-agents-developer-associate?wt.mc_id=certnurture_eml14_email_wwl\\&tab=credentials-tab}{\\textcolor{blue}{Microsoft Certified: Azure AI Apps and Agents Developer Associate}} (Azure AI solution lifecycle, GenAI and agents, vision, language, and information extraction); \\href{https://learn.microsoft.com/en-us/users/aryanjstar/credentials/certification/azure-ai-fundamentals?wt.mc_id=certnurture_eml14_email_wwl\\&tab=credentials-tab}{\\textcolor{blue}{Microsoft Certified: Azure AI Fundamentals}} (AI concepts and Microsoft Foundry); \\textbf{GitHub Certified GH-600: Developing in Agentic AI Systems (Beta)}.",
   },
   {
     id: "msa",
@@ -589,11 +589,35 @@ export const accomplishments: Accomplishment[] = [
     keywords: ["community", "founder", "mentor", "leadership", "microsoft"],
     asset: "founding and running a student community of real size",
     plain:
-      "Founder and former President, MSA IIIT Dharwad: led a 60+ core team and grew MSA Nexus to 500+ members. Only Gold Startup Scout at Microsoft in India.",
+      "Gold (Senior) Microsoft Student Ambassador: achieved the program's highest tier; founded and led the campus chapter, managed a 60+ core team, and grew MSA Nexus to 500+ members. Featured by Tracey Salem, Microsoft.",
     letter:
-      "I founded the Microsoft Student Ambassadors chapter at IIIT Dharwad, ran a core team of 60+, and grew MSA Nexus to 500+ members. I am the only Gold Startup Scout at Microsoft in India.",
+      "I am a Gold (Senior) Microsoft Student Ambassador, the program's highest tier; I founded and led the IIIT Dharwad chapter, ran a 60+ core team, and grew MSA Nexus to 500+ members.",
     latex:
-      "\\textbf{Founder \\& Former President -- \\href{https://msa-iiitdwd.vercel.app}{MSA IIIT Dharwad}}: Led and scaled the official community, managed a \\textbf{60+} core team, and grew \\href{http://chat.whatsapp.com/HiE8qUaaIpYJNA5WPuCozD}{\\textcolor{blue}{MSA Nexus}} to \\textbf{500+} members. \\textbf{Only Gold Startup Scout at Microsoft in India.}",
+      "\\textbf{Gold (Senior) Microsoft Student Ambassador}: Achieved the program's \\textbf{highest tier}; founded and led the \\href{https://msa-iiitdwd.vercel.app}{\\textcolor{blue}{campus chapter}}, managed a \\textbf{60+} core team, and grew \\href{http://chat.whatsapp.com/HiE8qUaaIpYJNA5WPuCozD}{\\textcolor{blue}{MSA Nexus}} to \\textbf{500+} members. \\href{https://techcommunity.microsoft.com/blog/studentdeveloperblog/meet-aryan-jaiswal/4538102}{\\textcolor{blue}{Featured by Tracey Salem, Microsoft.}}",
+  },
+  {
+    id: "lor",
+    base: 6,
+    keywords: ["microsoft", "mentor", "community", "recommendation"],
+    asset: "a Microsoft letter of recommendation",
+    plain:
+      "Letter of Recommendation, Microsoft: received from Pablo Veramendi, Global Director, Audience Evangelism, recognizing leadership in events, workshops, community building, and mentoring.",
+    letter:
+      "I have a letter of recommendation from Pablo Veramendi, Global Director, Audience Evangelism at Microsoft, recognizing my leadership in events, workshops, community building, and mentoring.",
+    latex:
+      "\\textbf{Letter of Recommendation -- Microsoft}: Received from \\href{https://www.linkedin.com/in/pveramendi}{\\textcolor{blue}{Pablo Veramendi}}, Global Director, Audience Evangelism, recognizing leadership in events, workshops, community building, and mentoring. \\href{https://drive.google.com/file/d/1fPSHlkk8T89CJ55hPlJQ-sDO-dwutkxM/view?usp=sharing}{\\textcolor{blue}{[LOR]}}",
+  },
+  {
+    id: "startup-scout",
+    base: 4,
+    keywords: ["microsoft", "startup", "azure", "founders"],
+    asset: "a Gold Startup Scout track record across 8 referred startups",
+    plain:
+      "Gold Startup Scout, Microsoft for Startups: referred 8 high-potential startups across AI, healthcare, SaaS, DevTools, and AgriTech to Founders Hub, helping founders secure up to $25K Azure credits and startup benefits.",
+    letter:
+      "As a Gold Startup Scout for Microsoft for Startups, I referred 8 high-potential startups across AI, healthcare, SaaS, DevTools, and AgriTech to Founders Hub, helping founders secure up to $25K in Azure credits.",
+    latex:
+      "\\textbf{Gold Startup Scout -- \\href{https://www.linkedin.com/in/aryanjstar/edit/forms/position/2856845037/}{Microsoft for Startups}}: Referred \\textbf{8 high-potential startups} across AI, healthcare, SaaS, DevTools, and AgriTech to Founders Hub, helping founders secure up to \\textbf{\\$25K Azure credits} and startup benefits.",
   },
   {
     id: "copilot-days",
