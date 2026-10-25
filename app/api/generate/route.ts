@@ -32,31 +32,43 @@ export async function POST(request: Request) {
 
   const company = body.company?.trim() || "Hiring Team";
   const role = body.role?.trim() || "Software Engineer";
-  const rendered = await renderDocuments({
-    jd: body.jd,
-    company,
-    role,
-    wantResume: body.wantResume,
-    wantCover: body.wantCover,
-    angle: body.angle,
-    polish: body.polish,
-    pinned: body.projectIds,
-  });
+
+  let rendered;
+  try {
+    rendered = await renderDocuments({
+      jd: body.jd,
+      company,
+      role,
+      wantResume: body.wantResume,
+      wantCover: body.wantCover,
+      angle: body.angle,
+      polish: body.polish,
+      pinned: body.projectIds,
+    });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "The documents did not render.";
+    return NextResponse.json({ error: message.slice(0, 240) }, { status: 500 });
+  }
+
   const { packet } = rendered;
   const id = randomUUID();
-  await addApplication({
-    id,
-    createdAt: new Date().toISOString(),
-    company,
-    role,
-    fit: packet.analysis.score,
-    secondProject: packet.selection.projects[1]?.name ?? packet.selection.projects[0].name,
-    status: "prepared",
-    jdExcerpt: body.jd.replace(/\s+/g, " ").slice(0, 280),
-    warnings: packet.warnings,
-    resumeTex: packet.resumeTex,
-    coverTex: packet.coverTex,
-  });
+  try {
+    await addApplication({
+      id,
+      createdAt: new Date().toISOString(),
+      company,
+      role,
+      fit: packet.analysis.score,
+      secondProject: packet.selection.projects[1]?.name ?? packet.selection.projects[0].name,
+      status: "prepared",
+      jdExcerpt: body.jd.replace(/\s+/g, " ").slice(0, 280),
+      warnings: packet.warnings,
+      resumeTex: packet.resumeTex,
+      coverTex: packet.coverTex,
+    });
+  } catch {
+    // The log is best-effort. A broken Log row should never cost you the PDF.
+  }
 
   const traced = factTrace(
     [packet.resumePlain, packet.coverPlain].filter((part): part is string => Boolean(part)).join("\n"),

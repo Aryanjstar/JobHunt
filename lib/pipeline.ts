@@ -2,7 +2,7 @@ import { writeCover } from "./cover";
 import { analyzeJd } from "./jd";
 import { acceptPolish } from "./guard";
 import { coverTex, resumePlain, resumeTex } from "./latex";
-import { education, roles } from "./profile";
+import { contact, education, roles } from "./profile";
 import { DEFAULT_BUDGET, select } from "./select";
 import type { Budget, JdAnalysis, Letter, Selection } from "./types";
 
@@ -20,6 +20,11 @@ export type Packet = {
 
 export function coverSources(selection: Selection): string[] {
   const texts = [
+    // The resume header always prints these, so the fact-check guard needs
+    // them as allowed sources or it flags the candidate's own phone/email
+    // as an unknown number on every single generation.
+    contact.phone,
+    contact.email,
     education.plain,
     ...roles.flatMap((role) => role.bullets.map((bullet) => bullet.plain)),
     ...selection.projects.flatMap((project) => project.bullets.map((bullet) => bullet.plain)),

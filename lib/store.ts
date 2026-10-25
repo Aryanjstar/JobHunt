@@ -1,4 +1,5 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
+import os from "node:os";
 import path from "node:path";
 import { type Status } from "./statuses";
 
@@ -18,11 +19,22 @@ export type Application = {
   coverTex: string | null;
 };
 
-const file = path.join(process.cwd(), "data", "applications.json");
+// The repo checkout (process.cwd()) is read-only on Vercel's serverless
+// filesystem. Writes there throw, which used to crash /api/generate with a
+// bare 500 and leave the "Generating..." button stuck. Fall back to the
+// container's writable /tmp so a request never crashes over logging, even
+// though that file does not persist across cold starts there.
+const primaryFile = path.join(process.cwd(), "data", "applications.json");
+const fallbackFile = path.join(os.tmpdir(), "desk-applications.json");
+let useFallback = false;
+
+function currentFile(): string {
+  return useFallback ? fallbackFile : primaryFile;
+}
 
 async function readAll(): Promise<Application[]> {
   try {
-    const raw = await readFile(file, "utf8");
+    const raw = await readFile(currentFile(), "utf8");
     const parsed = JSON.parse(raw) as Application[];
     return Array.isArray(parsed) ? parsed : [];
   } catch {
@@ -31,8 +43,22 @@ async function readAll(): Promise<Application[]> {
 }
 
 async function writeAll(rows: Application[]): Promise<void> {
-  await mkdir(path.dirname(file), { recursive: true });
-  await writeFile(file, JSON.stringify(rows, null, 2));
+  const json = JSON.stringify(rows, null, 2);
+  if (!useFallback) {
+    try {
+      await mkdir(path.dirname(primaryFile), { recursive: true });
+      await writeFile(primaryFile, json);
+      return;
+    } catch {
+      useFallback = true;
+    }
+  }
+  try {
+    await mkdir(path.dirname(fallbackFile), { recursive: true });
+    await writeFile(fallbackFile, json);
+  } catch {
+    // Neither location is writable. Don't crash the request over logging.
+  }
 }
 
 export async function listApplications(): Promise<Application[]> {

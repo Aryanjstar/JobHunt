@@ -97,6 +97,31 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <Box component="main" sx={{ flex: 1, width: "100%", px: { xs: 2, sm: 3, lg: 4 }, py: { xs: 2, md: 3 } }}>
           {children}
         </Box>
+        <Box
+          component="footer"
+          sx={{
+            borderTop: "1px solid",
+            borderColor: "divider",
+            px: { xs: 2, sm: 3, lg: 4 },
+            py: 2,
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            flexWrap: "wrap",
+            gap: 1,
+            color: "text.secondary",
+            fontSize: 13,
+          }}
+        >
+          <Box>One profile. One description. Nothing is sent.</Box>
+          <Link
+            href="https://github.com/Aryanjstar/JobHunt"
+            underline="hover"
+            sx={{ color: "text.secondary", fontSize: 13 }}
+          >
+            Source on GitHub
+          </Link>
+        </Box>
       </Box>
     </Box>
   );
