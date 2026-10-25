@@ -28,6 +28,9 @@ const primaryFile = path.join(process.cwd(), "data", "applications.json");
 const fallbackFile = path.join(os.tmpdir(), "desk-applications.json");
 let useFallback = false;
 
+// Keep the log from growing without bound across a long job hunt.
+const MAX_ROWS = 500;
+
 function currentFile(): string {
   return useFallback ? fallbackFile : primaryFile;
 }
@@ -69,7 +72,15 @@ export async function listApplications(): Promise<Application[]> {
 export async function addApplication(row: Application): Promise<void> {
   const rows = await readAll();
   rows.push(row);
-  await writeAll(rows);
+  await writeAll(rows.slice(-MAX_ROWS));
+}
+
+export async function deleteApplication(id: string): Promise<boolean> {
+  const rows = await readAll();
+  const next = rows.filter((row) => row.id !== id);
+  if (next.length === rows.length) return false;
+  await writeAll(next);
+  return true;
 }
 
 export async function getApplication(id: string): Promise<Application | null> {

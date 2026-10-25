@@ -4,7 +4,10 @@ const TERMS: Term[] = [
   { display: "Python", pattern: /\bpython\b/i, possessed: true },
   { display: "Java", pattern: /\bjava(?!script)\b/i, possessed: true },
   { display: "C++", pattern: /c\+\+/i, possessed: true },
-  { display: "Go", pattern: /\bgolang\b|(?<![a-z])go(?![a-z-])/i, possessed: true },
+  // Case-sensitive on purpose: "go" lowercase is one of the most common
+  // words in English prose ("as you go", "go live"), and a posting that
+  // never mentions the language otherwise should not get credit for it.
+  { display: "Go", pattern: /\b[Gg]olang\b|(?<![a-zA-Z])Go(?![a-zA-Z-])/, possessed: true },
   { display: "TypeScript", pattern: /\btypescript\b/i, possessed: true },
   { display: "JavaScript", pattern: /\bjavascript\b|\bjs\b/i, possessed: true, generic: true },
   { display: "React", pattern: /\breact(?:\.js)?\b/i, possessed: true },
@@ -171,6 +174,10 @@ export function analyzeJd(jd: string, role: string): JdAnalysis {
   const ratio = denom === 0 ? 0.5 : specificMatched.length / denom;
   let score: 1 | 2 | 3 | 4 | 5 =
     ratio >= 0.85 ? 5 : ratio >= 0.65 ? 4 : ratio >= 0.45 ? 3 : ratio >= 0.25 ? 2 : 1;
+  // One shared keyword is not a strong signal on its own -- it is often a
+  // single coincidental overlap with a role that has nothing else to do
+  // with the profile. Reserve 4s and 5s for postings with real depth.
+  if (specificMatched.length < 2 && score > 3) score = 3;
   if (blockers.length > 0) score = Math.min(score, 2) as 1 | 2 | 3 | 4 | 5;
 
   const reasons: string[] = [];

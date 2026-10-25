@@ -62,12 +62,55 @@ export default function LogPage() {
     });
   }
 
+  async function removeRow(id: string, label: string) {
+    if (!window.confirm(`Remove the row for ${label}? This does not undo an application you already sent.`)) return;
+    const previous = rows;
+    setRows((current) => current.filter((row) => row.id !== id));
+    const response = await fetch(`/api/applications/${id}`, { method: "DELETE" });
+    if (!response.ok) {
+      setRows(previous);
+      setError("That row did not delete.");
+    }
+  }
+
+  function exportCsv() {
+    const header = ["Created", "Company", "Role", "Fit", "Second project", "Status", "Excerpt"];
+    const escape = (value: string) => `"${value.replace(/"/g, '""')}"`;
+    const lines = [
+      header.join(","),
+      ...rows.map((row) =>
+        [
+          row.createdAt,
+          row.company,
+          row.role,
+          String(row.fit),
+          row.secondProject,
+          row.status,
+          row.jdExcerpt,
+        ]
+          .map(escape)
+          .join(","),
+      ),
+    ];
+    const url = URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "desk-log.csv";
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
   return (
     <Box>
       <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 46 }, mb: 1 }}>Log</Typography>
-      <Typography sx={{ mb: 3, color: "text.secondary", maxWidth: 760 }}>
+      <Typography sx={{ mb: 2, color: "text.secondary", maxWidth: 760 }}>
         Each row is a set of documents you made. Status starts at prepared, which means nothing has been submitted. Change it when you actually apply.
       </Typography>
+      {rows.length > 0 && (
+        <Button variant="outlined" size="small" onClick={exportCsv} sx={{ mb: 2 }}>
+          Export CSV
+        </Button>
+      )}
       {rows.length === 0 && (
         <Typography>No documents yet. They land here after you make a set in the studio.</Typography>
       )}
@@ -111,6 +154,15 @@ export default function LogPage() {
                   Letter PDF
                 </Button>
               )}
+              <Button
+                size="small"
+                variant="text"
+                color="error"
+                sx={{ ml: "auto" }}
+                onClick={() => removeRow(row.id, `${row.company} — ${row.role}`)}
+              >
+                Remove
+              </Button>
             </Box>
           </Box>
         ))}

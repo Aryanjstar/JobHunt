@@ -71,6 +71,15 @@ function saveText(filename: string, text: string) {
   URL.revokeObjectURL(url);
 }
 
+async function copyText(text: string): Promise<boolean> {
+  try {
+    await navigator.clipboard.writeText(text);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function fileSlug(company: string, role: string, kind: string) {
   const slug = `${company}-${role}-${kind}`.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
   return `aryan-${slug || kind}`;
@@ -90,6 +99,7 @@ export function Studio() {
   const [error, setError] = useState("");
   const [tab, setTab] = useState<"resume" | "cover">("resume");
   const [result, setResult] = useState<Generated | null>(null);
+  const [copied, setCopied] = useState("");
   const [queue, setQueue] = useState<QueueItem[]>([]);
 
   useEffect(() => {
@@ -441,7 +451,24 @@ export function Studio() {
                 Letter TeX
               </Button>
             )}
+            {result.cover && (
+              <Button
+                variant="text"
+                onClick={async () => {
+                  const ok = await copyText(result.cover!.paragraphs.join("\n\n"));
+                  setCopied(ok ? "Letter text copied." : "The clipboard did not accept that.");
+                  setTimeout(() => setCopied(""), 3000);
+                }}
+              >
+                Copy letter text
+              </Button>
+            )}
           </Box>
+          {copied && (
+            <Alert severity="info" sx={{ mb: 2 }}>
+              {copied}
+            </Alert>
+          )}
           <Typography variant="body2" sx={{ mb: 1.5, color: "text.secondary" }}>
             Read this before you send it. The PDF is the file to upload. This page is the same words, set for the screen.
           </Typography>

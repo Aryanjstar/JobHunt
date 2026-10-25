@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import { findOpenings, readPosting } from "@/lib/jobs";
+import { findOpenings, IrrelevantTitleError, readPosting } from "@/lib/jobs";
 
 export const runtime = "nodejs";
 
@@ -40,7 +40,16 @@ export async function POST(request: Request) {
       );
     }
     return NextResponse.json({ opening });
-  } catch {
+  } catch (error) {
+    if (error instanceof IrrelevantTitleError) {
+      return NextResponse.json(
+        {
+          error:
+            "That posting's title doesn't read like AI, backend, frontend, full-stack, SDE, platform, infrastructure, or member-of-technical-staff work, so Desk will not tailor documents for it.",
+        },
+        { status: 400 },
+      );
+    }
     return NextResponse.json({ error: "That posting did not load." }, { status: 502 });
   }
 }

@@ -90,25 +90,61 @@ type Candidate = {
   load?: () => Promise<string>;
 };
 
+function titleLooksTechnical(title: string): boolean {
+  return TITLE.test(title) && !SKIP.test(title);
+}
+
 export function listingAllowed(title: string, location: string): boolean {
-  if (!TITLE.test(title) || SKIP.test(title)) return false;
+  if (!titleLooksTechnical(title)) return false;
   if (!location) return true;
   if (INDIA.test(location)) return true;
   if (AWAY.test(location)) return false;
   return OPEN.test(location);
 }
 
+/** Thrown when a pasted link loads a real posting whose title is not an engineering role. */
+export class IrrelevantTitleError extends Error {}
+
 export function indiaPlace(location: string): boolean {
   return INDIA.test(location);
 }
 
+const NAMED_ENTITIES: Record<string, string> = {
+  nbsp: " ",
+  amp: "&",
+  lt: "<",
+  gt: ">",
+  quot: '"',
+  apos: "'",
+  rsquo: "\u2019",
+  lsquo: "\u2018",
+  rdquo: "\u201d",
+  ldquo: "\u201c",
+  mdash: "\u2014",
+  ndash: "\u2013",
+  hellip: "\u2026",
+  copy: "\u00a9",
+  reg: "\u00ae",
+  trade: "\u2122",
+};
+
+function decodeEntities(text: string): string {
+  return text.replace(/&(#x?[0-9a-f]+|[a-z]+);/gi, (match, token: string) => {
+    if (token[0] === "#") {
+      const code = token[1]?.toLowerCase() === "x" ? parseInt(token.slice(2), 16) : parseInt(token.slice(1), 10);
+      return Number.isFinite(code) ? String.fromCodePoint(code) : match;
+    }
+    return NAMED_ENTITIES[token.toLowerCase()] ?? match;
+  });
+}
+
 export function stripHtml(html: string): string {
-  return html
+  // Some postings store entity-encoded markup ("&lt;div&gt;"), which only
+  // becomes real-looking tags after decoding. Strip tags, decode, then
+  // strip again so nothing slips through either path.
+  const decoded = decodeEntities(html.replace(/<[^>]+>/g, " "));
+  return decoded
     .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
     .replace(/\s+/g, " ")
     .trim();
 }
@@ -318,6 +354,9 @@ export async function readPosting(raw: string): Promise<Opening | null> {
     };
   }
   if (!candidate?.title || !candidate.url) return null;
+  if (!titleLooksTechnical(candidate.title)) {
+    throw new IrrelevantTitleError(candidate.title);
+  }
   const jd = `${candidate.title}\n${candidate.location}\n${candidate.description}`;
   const analysis = analyzeJd(jd, candidate.title);
   return {
